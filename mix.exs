@@ -42,7 +42,22 @@ defmodule Flisat.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      # CamelCase to snake_case
+      {:proper_case, "~> 1.0.2"},
+      # passwordhash
+      {:argon2_elixir, "~> 3.0"},
+      # auth
+      {:guardian, "~> 2.0"},
+      # policy
+      {:bodyguard, "~> 2.4"},
+      # code analys
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      # testing
+      {:ex_machina, "~> 2.7.0"},
+      {:faker, "~> 0.13", only: [:test, :dev, :staging, :ci]},
+      # pagination
+      {:scrivener_ecto, "~> 2.0"}
     ]
   end
 
