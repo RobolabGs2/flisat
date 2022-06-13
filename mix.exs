@@ -57,7 +57,11 @@ defmodule Flisat.MixProject do
       {:ex_machina, "~> 2.7.0"},
       {:faker, "~> 0.13", only: [:test, :dev, :staging, :ci]},
       # pagination
-      {:scrivener_ecto, "~> 2.0"}
+      {:scrivener_ecto, "~> 2.0"},
+      # Email struct via ecto
+      {:email_ecto_type, "~> 0.1"},
+      # params valiation
+      {:params, "~> 2.2"}
     ]
   end
 

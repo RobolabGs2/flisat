@@ -24,6 +24,8 @@ defmodule Flisat.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Flisat.DataCase
+
+      import Flisat.Factories
     end
   end
 
