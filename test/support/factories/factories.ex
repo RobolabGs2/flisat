@@ -3,6 +3,7 @@ defmodule Flisat.Factories do
 
   use Flisat.Factories.{
     Accounts.UserFactory,
-    Content.TagFactory
+    Content.TagFactory,
+    Content.PostFactory
   }
 end
