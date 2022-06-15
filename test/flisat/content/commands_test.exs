@@ -52,4 +52,44 @@ defmodule Flisat.Content.Commands.Test do
                author_id: -1
              })
   end
+
+  test "create_post/2 with tags test" do
+    tag1 = insert(:tag)
+    tag2 = insert(:tag)
+
+    assert {:ok, post1} =
+             Content.create_post(%{
+               title: Faker.Lorem.sentence(1..4),
+               content: Faker.Lorem.sentence(1..4),
+               author_id: insert(:user).id,
+               tag_ids: [tag1.id, tag2.id]
+             })
+
+    assert {:ok, post2} =
+             Content.create_post(%{
+               title: Faker.Lorem.sentence(1..4),
+               content: Faker.Lorem.sentence(1..4),
+               author_id: insert(:user).id,
+               tag_ids: [tag1.id]
+             })
+
+    assert {:ok, post3} =
+             Content.create_post(%{
+               title: Faker.Lorem.sentence(1..4),
+               content: Faker.Lorem.sentence(1..4),
+               author_id: insert(:user).id,
+               tag_ids: [tag2.id]
+             })
+
+    # TODO think about it again
+    tag1postIds = (tag1 |> Flisat.Repo.preload(:posts)).posts |> Enum.map(fn post -> post.id end)
+    assert post1.id in tag1postIds
+    assert post2.id in tag1postIds
+    assert post3.id not in tag1postIds
+
+    tag2postIds = (tag2 |> Flisat.Repo.preload(:posts)).posts |> Enum.map(fn post -> post.id end)
+    assert post1.id in tag2postIds
+    assert post2.id not in tag2postIds
+    assert post3.id in tag2postIds
+  end
 end
