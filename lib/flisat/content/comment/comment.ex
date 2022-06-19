@@ -16,6 +16,8 @@ defmodule Flisat.Content.Comment do
     belongs_to :post, Post
     belongs_to :author, User
 
+    many_to_many :likes, User, join_through: "comments_likes", on_replace: :delete, unique: true
+
     timestamps()
   end
 

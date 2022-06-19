@@ -16,7 +16,8 @@ defmodule Flisat.Content.Post do
     field :title, :string
 
     belongs_to :author, User
-    many_to_many :tags, Tag, join_through: "post_tags", on_replace: :delete
+    many_to_many :tags, Tag, join_through: "post_tags", on_replace: :delete, unique: true
+    many_to_many :likes, User, join_through: "posts_likes", on_replace: :delete, unique: true
     has_many :comments, Comment
 
     timestamps()

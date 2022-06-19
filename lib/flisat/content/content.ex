@@ -17,7 +17,7 @@ defmodule Flisat.Content do
   defdelegate update_post(post, attrs), to: Post.Commands, as: :update
 
   defdelegate get_post(id), to: Post.Queries, as: :get
-  defdelegate list_posts(), to: Post.Queries, as: :list
+  defdelegate list_posts(params), to: Post.Queries, as: :list
 
   # Comments
   defdelegate create_comment(attrs), to: Comment.Commands, as: :create

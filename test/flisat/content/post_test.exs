@@ -79,4 +79,52 @@ defmodule Flisat.Content.Post.Test do
     assert post2.id not in tag2postIds
     assert post3.id in tag2postIds
   end
+
+  test "list_posts/1 with filter by author" do
+    author = insert(:user)
+
+    author_posts = [
+      insert(:post, %{author: author}).id,
+      insert(:post, %{author: author}).id,
+      insert(:post, %{author: author}).id
+    ]
+    insert(:post)
+    insert(:post)
+    insert(:post)
+    insert(:post)
+    posts = Content.list_posts(%{author_id: author.id})
+    assert equals_as_sets(Enum.map(posts.entries, fn p -> p.id end), author_posts)
+  end
+
+  test "list_posts/1 with filter by title" do
+    expected_posts = [
+      insert(:post, %{title: "Elixir tutorial #1. Hello there!"}).id,
+      insert(:post, %{title: "Elixir tutorial #2"}).id,
+      insert(:post, %{title: "Next Elixir tutorial #3"}).id
+    ]
+    insert(:post, %{title: "Go tutorial #42"})
+    insert(:post, %{title: "You search another post"})
+    insert(:post, %{title: "Elixir shoulds not pass!"})
+    insert(:post, %{title: "Example title"})
+    posts = Content.list_posts(%{title: "Elixir tutorial"})
+    assert equals_as_sets(Enum.map(posts.entries, fn p -> p.id end), expected_posts)
+  end
+
+  test "list_posts/1 with filter by content" do
+    expected_posts = [
+      insert(:post, %{content: "Elixir tutorial #1. Hello there!"}).id,
+      insert(:post, %{content: "Elixir tutorial #2"}).id,
+      insert(:post, %{content: "Next Elixir tutorial #3"}).id
+    ]
+    insert(:post, %{content: "Go tutorial #42"})
+    insert(:post, %{content: "You search another post"})
+    insert(:post, %{content: "Elixir shoulds not pass!"})
+    insert(:post, %{content: "Example title"})
+    posts = Content.list_posts(%{content: "Elixir tutorial"})
+    assert equals_as_sets(Enum.map(posts.entries, fn p -> p.id end), expected_posts)
+  end
+
+  defp equals_as_sets(list1, list2) do
+    length(list1 -- list2) == 0 and length(list2 -- list1) == 0
+  end
 end
