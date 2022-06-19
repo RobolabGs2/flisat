@@ -1,6 +1,8 @@
 defmodule Flisat.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Flisat.Content.Post
+  alias Flisat.Content.Comment
 
   @required [:nickname, :password]
 
@@ -9,6 +11,8 @@ defmodule Flisat.Accounts.User do
     field :password, :string, virtual: true
     field :password_hash, :string
 
+    has_many :posts, Post, foreign_key: :author_id
+    has_many :comments, Comment, foreign_key: :author_id
     timestamps()
   end
 

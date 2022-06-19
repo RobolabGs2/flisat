@@ -1,21 +1,30 @@
 defmodule Flisat.Content do
-  alias Flisat.Content.Commands
-  alias Flisat.Content.Queries
+  alias Flisat.Content.Tag
+  alias Flisat.Content.Post
+  alias Flisat.Content.Comment
 
-  # Commands
-  defdelegate create_tag(attrs), to: Commands, as: :create_tag
-  defdelegate delete_tag(tag), to: Commands, as: :delete_tag
-  defdelegate update_tag(tag, attrs), to: Commands, as: :update_tag
+  # Tags
+  defdelegate create_tag(attrs), to: Tag.Commands, as: :create
+  defdelegate delete_tag(tag), to: Tag.Commands, as: :delete
+  defdelegate update_tag(tag, attrs), to: Tag.Commands, as: :update
 
-  # Queries
-  defdelegate get_tag(id), to: Queries, as: :get_tag
-  defdelegate list_tags(), to: Queries, as: :list_tags
+  defdelegate get_tag(id), to: Tag.Queries, as: :get
+  defdelegate list_tags(), to: Tag.Queries, as: :list
 
-  defdelegate create_post(attrs), to: Commands, as: :create_post
-  defdelegate delete_post(tag), to: Commands, as: :delete_post
-  defdelegate update_post(tag, attrs), to: Commands, as: :update_post
+  # Posts
+  defdelegate create_post(attrs), to: Post.Commands, as: :create
+  defdelegate delete_post(post), to: Post.Commands, as: :delete
+  defdelegate update_post(post, attrs), to: Post.Commands, as: :update
 
-  # Queries
-  defdelegate get_post(id), to: Queries, as: :get_post
-  defdelegate list_posts(), to: Queries, as: :list_posts
+  defdelegate get_post(id), to: Post.Queries, as: :get
+  defdelegate list_posts(), to: Post.Queries, as: :list
+
+  # Comments
+  defdelegate create_comment(attrs), to: Comment.Commands, as: :create
+  defdelegate delete_comment(comment), to: Comment.Commands, as: :delete
+  defdelegate update_comment(comment, attrs), to: Comment.Commands, as: :update
+
+  defdelegate get_comment(id), to: Comment.Queries, as: :get
+  defdelegate list_comments(), to: Comment.Queries, as: :list
+
 end

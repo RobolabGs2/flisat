@@ -3,6 +3,7 @@ defmodule Flisat.Content.Post do
   import Ecto.Changeset
   alias Flisat.Accounts.User
   alias Flisat.Content.Tag
+  alias Flisat.Content.Comment
 
   @required [
     :title,
@@ -16,6 +17,7 @@ defmodule Flisat.Content.Post do
 
     belongs_to :author, User
     many_to_many :tags, Tag, join_through: "post_tags", on_replace: :delete
+    has_many :comments, Comment
 
     timestamps()
   end

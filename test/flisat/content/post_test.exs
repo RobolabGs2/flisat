@@ -1,20 +1,7 @@
-defmodule Flisat.Content.Commands.Test do
+defmodule Flisat.Content.Post.Test do
   use Flisat.DataCase
 
   alias Flisat.Content
-
-  test "delete_tag/1 test" do
-    tag = insert(:tag)
-    assert {:ok, _result} = Content.delete_tag(tag)
-    assert {:error, :not_found} = Content.get_tag(tag.id)
-  end
-
-  test "update_tag/1 test" do
-    tag = insert(:tag, %{title: "Old title"})
-    attrs = %{title: "New title"}
-    assert {:ok, updated_tag} = Content.update_tag(tag, attrs)
-    assert updated_tag.title == attrs.title
-  end
 
   test "delete_post/1 test" do
     post = insert(:post)
@@ -22,14 +9,14 @@ defmodule Flisat.Content.Commands.Test do
     assert {:error, :not_found} = Content.get_post(post.id)
   end
 
-  test "update_post/1 title test" do
+  test "update_post/2 title test" do
     post = insert(:post, %{title: "Old title"})
     attrs = %{title: "New title"}
     assert {:ok, updated_post} = Content.update_post(post, attrs)
     assert updated_post.title == attrs.title
   end
 
-  test "create_post/2 validation title lenght test" do
+  test "create_post/1 validation title lenght test" do
     assert {:error, _changeset} =
              Content.create_post(%{
                title: Faker.String.base64(257),
@@ -38,7 +25,7 @@ defmodule Flisat.Content.Commands.Test do
              })
   end
 
-  test "create_post/2 validation author does not exists test" do
+  test "create_post/1 validation author does not exists test" do
     assert {:error,
             %Ecto.Changeset{
               errors: [author: {"does not exist", _ignore}],
@@ -53,7 +40,7 @@ defmodule Flisat.Content.Commands.Test do
              })
   end
 
-  test "create_post/2 with tags test" do
+  test "create_post/1 with tags test" do
     tag1 = insert(:tag)
     tag2 = insert(:tag)
 
