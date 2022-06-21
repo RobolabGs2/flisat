@@ -150,6 +150,7 @@ defmodule Flisat.Content.Post.Test do
     fresh_posts = insert_list(4, :post)
     today = DateTime.now!("Etc/UTC") |> DateTime.to_date()
     posts = Content.list_posts(%{start_date: today, end_date: today})
+
     assert equals_as_sets(
              extract_id(posts.entries),
              extract_id(fresh_posts)
@@ -161,6 +162,52 @@ defmodule Flisat.Content.Post.Test do
     tommorow = DateTime.now!("Etc/UTC") |> DateTime.to_date() |> Date.add(1)
     posts = Content.list_posts(%{start_date: tommorow, end_date: tommorow})
     assert posts.total_entries == 0
+  end
+
+  test "list_posts/1 with filter by rating" do
+    posts_with_2_likes = insert_list(1, :post) |> add_likes(2)
+    posts_with_4_likes = insert_list(4, :post) |> add_likes(4)
+    posts_with_10_likes = insert_list(1, :post) |> add_likes(10)
+
+    posts_between_3_5 = Content.list_posts(%{min_likes: 3, max_likes: 5})
+
+    assert equals_as_sets(
+             extract_id(posts_between_3_5.entries),
+             extract_id(posts_with_4_likes)
+           )
+
+    posts_between_2_5 = Content.list_posts(%{min_likes: 2, max_likes: 5})
+
+    assert equals_as_sets(
+             extract_id(posts_between_2_5.entries),
+             extract_id(posts_with_2_likes ++ posts_with_4_likes)
+           )
+
+    posts_between_2_600 = Content.list_posts(%{min_likes: 2, max_likes: 600})
+
+    assert equals_as_sets(
+             extract_id(posts_between_2_600.entries),
+             extract_id(posts_with_2_likes ++ posts_with_4_likes ++ posts_with_10_likes)
+           )
+  end
+
+  test "like_post/2 like" do
+    post = insert(:post)
+    user = insert(:user)
+    {:ok, _} = Content.like_post(post, user)
+    post_likes = Flisat.Repo.preload(post, :likes).likes
+    assert length(post_likes) == 1
+    assert user.id in Enum.map(post_likes, fn user -> user.id end)
+    user_likes = Flisat.Repo.preload(user, :posts_likes).posts_likes
+    assert post.id in Enum.map(user_likes, fn post -> post.id end)
+  end
+
+  test "like_post/2 can't like to post that does't exist " do
+    assert {:error, _msg} = Content.like_post(%Content.Post{id: -1}, insert(:user))
+  end
+
+  test "like_post/2 can't like by user that does't exist " do
+    assert {:error, _msg} = Content.like_post(insert(:post), %Flisat.Accounts.User{id: -1})
   end
 
   defp equals_as_sets(list1, list2) do
@@ -177,6 +224,17 @@ defmodule Flisat.Content.Post.Test do
 
   defp add_tags(post, tags) do
     {:ok, post} = Content.update_post(post, %{tags: tags})
+    post
+  end
+
+  defp add_likes(posts, count) when is_list(posts) do
+    Enum.map(posts, fn post -> add_likes(post, count) end)
+  end
+
+  defp add_likes(post, count) do
+    insert_list(count, :user)
+    |> Enum.each(fn user -> Content.like_post(post, user) end)
+
     post
   end
 end

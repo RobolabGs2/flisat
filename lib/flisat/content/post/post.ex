@@ -34,5 +34,4 @@ defmodule Flisat.Content.Post do
     |> unique_constraint(:title)
     |> put_assoc(:tags, Map.get(attrs, :tags, []))
   end
-
 end

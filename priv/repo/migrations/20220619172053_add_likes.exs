@@ -18,6 +18,9 @@ defmodule Flisat.Repo.Migrations.AddLikes do
 
     create(index(:comments_likes, [:comment_id]))
     create(index(:comments_likes, [:user_id]))
-    create unique_index(:comments_likes, [:comment_id, :user_id], name: :comment_id_user_id_unique_index)
+
+    create unique_index(:comments_likes, [:comment_id, :user_id],
+             name: :comment_id_user_id_unique_index
+           )
   end
 end

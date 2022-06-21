@@ -1,5 +1,7 @@
 defmodule Flisat.Content.Comment.Commands do
   alias Flisat.Content.Comment
+  alias Flisat.Content.Comment.Like
+  alias Flisat.Accounts.User
   alias Flisat.Repo
 
   def create(attrs) do
@@ -18,4 +20,9 @@ defmodule Flisat.Content.Comment.Commands do
     Repo.delete(comment)
   end
 
+  def like(%Comment{} = comment, %User{} = user) do
+    %Like{}
+    |> Like.changeset(%{comment_id: comment.id, user_id: user.id})
+    |> Repo.insert()
+  end
 end

@@ -13,8 +13,17 @@ defmodule Flisat.Accounts.User do
 
     has_many :posts, Post, foreign_key: :author_id
     has_many :comments, Comment, foreign_key: :author_id
-    many_to_many :comments_likes, Post, join_through: "comments_likes", on_replace: :delete, unique: true
-    many_to_many :posts_likes, Comment, join_through: "posts_likes", on_replace: :delete, unique: true
+
+    many_to_many :comments_likes, Comment,
+      join_through: "comments_likes",
+      on_replace: :delete,
+      unique: true
+
+    many_to_many :posts_likes, Post,
+      join_through: "posts_likes",
+      on_replace: :delete,
+      unique: true
+
     timestamps()
   end
 

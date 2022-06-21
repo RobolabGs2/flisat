@@ -1,5 +1,7 @@
 defmodule Flisat.Content.Post.Commands do
+  alias Flisat.Accounts.User
   alias Flisat.Content.Post
+  alias Flisat.Content.Post.Like
   alias Flisat.Repo
 
   def create(attrs) do
@@ -16,5 +18,11 @@ defmodule Flisat.Content.Post.Commands do
 
   def delete(%Post{} = post) do
     Repo.delete(post)
+  end
+
+  def like(%Post{} = post, %User{} = user) do
+    %Like{}
+    |> Like.changeset(%{post_id: post.id, user_id: user.id})
+    |> Repo.insert()
   end
 end

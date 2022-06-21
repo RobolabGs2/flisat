@@ -48,4 +48,22 @@ defmodule Flisat.Content.Comments.Test do
              })
   end
 
+  test "like_comment/2 like" do
+    comment = insert(:comment)
+    user = insert(:user)
+    {:ok, _} = Content.like_comment(comment, user)
+    comment_likes = Flisat.Repo.preload(comment, :likes).likes
+    assert length(comment_likes) == 1
+    assert user.id in Enum.map(comment_likes, fn user -> user.id end)
+    user_likes = Flisat.Repo.preload(user, :comments_likes).comments_likes
+    assert comment.id in Enum.map(user_likes, fn comment -> comment.id end)
+  end
+
+  test "like_comment/2 can't like to comment that does't exist " do
+    assert {:error, _msg} = Content.like_comment(%Content.Comment{id: -1}, insert(:user))
+  end
+
+  test "like_comment/2 can't like by user that does't exist " do
+    assert {:error, _msg} = Content.like_comment(insert(:comment), %Flisat.Accounts.User{id: -1})
+  end
 end

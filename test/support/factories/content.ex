@@ -24,6 +24,7 @@ defmodule Flisat.Factories.Content do
         title = Map.get(attrs, :title, sequence(:title, &"#{&1}_#{Lorem.sentence(1..4)}"))
         content = Map.get(attrs, :content, Lorem.sentences(4..16) |> Enum.join(" "))
         author = Map.get(attrs, :author, insert(:user))
+
         %Ecto.Changeset{valid?: true, changes: changes} =
           Post.changeset(%Post{}, %{
             title: title,

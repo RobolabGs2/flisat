@@ -21,7 +21,7 @@ defmodule Flisat.Content.Comment do
     timestamps()
   end
 
-  def changeset(comment, attrs) do
+  def changeset(%__MODULE__{} = comment, attrs) do
     comment
     |> cast(attrs, @required)
     |> validate_required(@required)
