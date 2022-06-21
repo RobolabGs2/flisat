@@ -10,10 +10,11 @@ defmodule Flisat.Content.Post.Queries do
 
   def list(params) do
     Post
-    |> with_author(params)
     |> with_tags(params)
+    |> with_author(params)
     |> with_title(params)
     |> with_content(params)
+    |> with_date(params)
     |> Repo.paginate(params)
   end
 
@@ -23,9 +24,13 @@ defmodule Flisat.Content.Post.Queries do
 
   defp with_author(query, _), do: query
 
-  # defp with_tags(query, %{tags_id: tags_id}) do
-    # query |> where(author_id: ^author_id) TODO
-  # end
+  defp with_tags(query, %{tag_ids: tag_ids}) do
+    query
+    |> join(:left, [post], tag in assoc(post, :tags))
+    |> where([_post, tag], tag.id in ^tag_ids)
+    |> group_by([post, tag], post.id)
+    |> having([_post, tag], count(tag.id) == ^length(tag_ids))
+  end
 
   defp with_tags(query, _), do: query
 
@@ -42,4 +47,15 @@ defmodule Flisat.Content.Post.Queries do
   end
 
   defp with_content(query, _), do: query
+
+  defp with_date(query, %{start_date: start_date, end_date: end_date}) do
+    query |> where(
+      [post],
+      fragment(
+        "?::date BETWEEN ?::date and ?::date",
+        post.inserted_at, ^start_date, ^end_date
+    ))
+  end
+
+  defp with_date(query, _), do: query
 end
