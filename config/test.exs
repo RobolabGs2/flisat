@@ -25,3 +25,6 @@ config :logger, level: :warn
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :flisat, Flisat.Accounts.Services.Guardian,
+  secret_key: "jx5m5YtTHyUg6OSKWYOiFJlZsnboMzClmx+ZDXuZTlDDh9bxAEu1U/1y8oY+lnfU"

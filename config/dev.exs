@@ -59,3 +59,6 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :flisat, Flisat.Accounts.Services.Guardian,
+  secret_key: "PZyzd/dp+PmBSuI8RNaNyATk8Y1CTYu9CWLJIDHCYncvXAdXXl59T9CRX4ZPrz40"

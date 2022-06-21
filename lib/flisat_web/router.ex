@@ -9,6 +9,25 @@ defmodule FlisatWeb.Router do
     pipe_through :api
   end
 
+  pipeline :user_auth do
+    plug Flisat.Accounts.Guardian.Pipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated
+    plug FlisatWeb.CurrentUserPlug
+  end
+
+  scope "/api/v1", FlisatWeb.V1 do
+    pipe_through [:api]
+
+    post "/users", UserController, :create
+    resources "/tags", TagController, only: [:index, :show]
+
+    pipe_through [:user_auth, :ensure_auth]
+    resources "/tags", TagController, only: [:create, :update]
+  end
+
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put

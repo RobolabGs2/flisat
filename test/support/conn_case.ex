@@ -24,10 +24,20 @@ defmodule FlisatWeb.ConnCase do
       import Phoenix.ConnTest
       import FlisatWeb.ConnCase
 
+      import Flisat.DataCase
+      import Flisat.Factories
+
       alias FlisatWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
       @endpoint FlisatWeb.Endpoint
+
+      def as_user(conn, %Flisat.Accounts.User{} = user) do
+        {:ok, token, _} =
+          Flisat.Accounts.Services.Guardian.encode_and_sign(user, %{}, token_type: :access)
+
+        Plug.Conn.put_req_header(conn, "authorization", "bearer: " <> token)
+      end
     end
   end
 

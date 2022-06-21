@@ -6,7 +6,7 @@ defmodule Flisat.Content.Tag.Queries do
     Repo.find(Tag, id)
   end
 
-  def list() do
-    Repo.all(Tag)
+  def list(params) do
+    Repo.paginate(Tag, params)
   end
 end

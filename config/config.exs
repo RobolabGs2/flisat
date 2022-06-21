@@ -10,6 +10,8 @@ import Config
 config :flisat,
   ecto_repos: [Flisat.Repo]
 
+config :flisat, Flisat.Accounts.Services.Guardian, issuer: "flisat"
+
 # Configures the endpoint
 config :flisat, FlisatWeb.Endpoint,
   url: [host: "localhost"],

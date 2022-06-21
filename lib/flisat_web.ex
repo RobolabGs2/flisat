@@ -23,7 +23,9 @@ defmodule FlisatWeb do
 
       import Plug.Conn
       import FlisatWeb.Gettext
+      alias FlisatWeb.ApplyParams
       alias FlisatWeb.Router.Helpers, as: Routes
+      alias Plug.Conn
     end
   end
 

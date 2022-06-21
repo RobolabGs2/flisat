@@ -9,7 +9,7 @@ defmodule Flisat.Content do
   defdelegate update_tag(tag, attrs), to: Tag.Commands, as: :update
 
   defdelegate get_tag(id), to: Tag.Queries, as: :get
-  defdelegate list_tags(), to: Tag.Queries, as: :list
+  defdelegate list_tags(params), to: Tag.Queries, as: :list
 
   # Posts
   defdelegate create_post(attrs), to: Post.Commands, as: :create
