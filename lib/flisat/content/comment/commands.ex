@@ -1,8 +1,8 @@
 defmodule Flisat.Content.Comment.Commands do
   alias Flisat.Content.Comment
   alias Flisat.Content.Comment.Like
-  alias Flisat.Accounts.User
   alias Flisat.Repo
+  import Ecto.Query
 
   def create(attrs) do
     %Comment{}
@@ -20,9 +20,16 @@ defmodule Flisat.Content.Comment.Commands do
     Repo.delete(comment)
   end
 
-  def like(%Comment{} = comment, %User{} = user) do
+  def like(comment_id, user_id) do
     %Like{}
-    |> Like.changeset(%{comment_id: comment.id, user_id: user.id})
+    |> Like.changeset(%{comment_id: comment_id, user_id: user_id})
     |> Repo.insert()
+  end
+
+  def unlike(comment_id, user_id) do
+    Like
+    |> where(comment_id: ^comment_id)
+    |> where(user_id: ^user_id)
+    |> Repo.delete_all()
   end
 end

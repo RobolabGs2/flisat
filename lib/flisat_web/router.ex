@@ -27,9 +27,12 @@ defmodule FlisatWeb.Router do
     resources "/comments", CommentController, only: [:index, :show]
 
     pipe_through [:user_auth, :ensure_auth]
-    resources "/tags", TagController, only: [:create, :update]
-    resources "/posts", PostController, only: [:create, :update]
-    resources "/comments", CommentController, only: [:create, :update]
+    resources "/tags", TagController, only: [:create]
+    resources "/posts", PostController, only: [:create]
+
+    resources "/comments", CommentController, only: [:create] do
+      resources "/likes", CommentLikeController, only: [:create, :delete]
+    end
   end
 
   # Enables LiveDashboard only for development

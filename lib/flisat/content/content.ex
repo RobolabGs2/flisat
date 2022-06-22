@@ -24,7 +24,8 @@ defmodule Flisat.Content do
   defdelegate create_comment(attrs), to: Comment.Commands, as: :create
   defdelegate delete_comment(comment), to: Comment.Commands, as: :delete
   defdelegate update_comment(comment, attrs), to: Comment.Commands, as: :update
-  defdelegate like_comment(comment, user), to: Comment.Commands, as: :like
+  defdelegate like_comment(comment_id, user_id), to: Comment.Commands, as: :like
+  defdelegate unlike_comment(comment_id, user_id), to: Comment.Commands, as: :unlike
 
   defdelegate get_comment(id), to: Comment.Queries, as: :get
   defdelegate list_comments(params), to: Comment.Queries, as: :list
