@@ -27,5 +27,5 @@ defmodule Flisat.Content do
   defdelegate like_comment(comment, user), to: Comment.Commands, as: :like
 
   defdelegate get_comment(id), to: Comment.Queries, as: :get
-  defdelegate list_comments(), to: Comment.Queries, as: :list
+  defdelegate list_comments(params), to: Comment.Queries, as: :list
 end

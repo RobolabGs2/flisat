@@ -19,6 +19,8 @@ defmodule Flisat.Content.Comment do
     many_to_many :likes, User, join_through: "comments_likes", on_replace: :delete, unique: true
 
     timestamps()
+
+    field :likes_count, :integer, virtual: true
   end
 
   def changeset(%__MODULE__{} = comment, attrs) do

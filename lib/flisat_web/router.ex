@@ -24,10 +24,12 @@ defmodule FlisatWeb.Router do
     post "/users", UserController, :create
     resources "/tags", TagController, only: [:index, :show]
     resources "/posts", PostController, only: [:index, :show]
+    resources "/comments", CommentController, only: [:index, :show]
 
     pipe_through [:user_auth, :ensure_auth]
     resources "/tags", TagController, only: [:create, :update]
     resources "/posts", PostController, only: [:create, :update]
+    resources "/comments", CommentController, only: [:create, :update]
   end
 
   # Enables LiveDashboard only for development

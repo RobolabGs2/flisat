@@ -20,7 +20,7 @@ defmodule Flisat.Content.Post.Queries do
     |> with_content(params)
     |> with_date(params)
     |> preload_relations()
-    |> order_by([asc: :id])
+    |> order_by(asc: :id)
     |> Repo.paginate(params)
   end
 
