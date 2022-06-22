@@ -200,6 +200,9 @@ defmodule Flisat.Content.Post.Test do
     assert user.id in Enum.map(post_likes, fn user -> user.id end)
     user_likes = Flisat.Repo.preload(user, :posts_likes).posts_likes
     assert post.id in Enum.map(user_likes, fn post -> post.id end)
+
+    {:ok, post} = Content.get_post(post.id)
+    assert post.likes_count == 1
   end
 
   test "like_post/2 can't like to post that does't exist " do

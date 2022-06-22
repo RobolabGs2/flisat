@@ -21,17 +21,23 @@ defmodule Flisat.Content.Post do
     has_many :comments, Comment
 
     timestamps()
+
+    field :likes_count, :integer, virtual: true
   end
 
-  @doc false
-  def changeset(%__MODULE__{} = post, attrs) do
+  def changeset(%__MODULE__{} = post, %{tags: tags} = attrs) do
     post
     |> Flisat.Repo.preload(:tags)
+    |> changeset(Map.delete(attrs, :tags))
+    |> put_assoc(:tags, tags)
+  end
+
+  def changeset(%__MODULE__{} = post, attrs) do
+    post
     |> cast(attrs, @required)
     |> validate_required(@required)
     |> validate_length(:title, max: 255, count: :bytes)
     |> assoc_constraint(:author)
     |> unique_constraint(:title)
-    |> put_assoc(:tags, Map.get(attrs, :tags, []))
   end
 end

@@ -5,7 +5,10 @@ defmodule Flisat.Content.Post.Queries do
   import Ecto.Query
 
   def get(id) do
-    Repo.find(Post, id)
+    Post
+    |> preload_relations()
+    |> likes_count()
+    |> Repo.find(id)
   end
 
   def list(params) do
@@ -16,6 +19,8 @@ defmodule Flisat.Content.Post.Queries do
     |> with_title(params)
     |> with_content(params)
     |> with_date(params)
+    |> preload_relations()
+    |> order_by([asc: :id])
     |> Repo.paginate(params)
   end
 
@@ -68,8 +73,37 @@ defmodule Flisat.Content.Post.Queries do
     query
     |> join(:left, [post], like in assoc(post, :likes))
     |> group_by([post, like], post.id)
+    |> select_merge([post, like], %{likes_count: count(like.id)})
     |> having([_post, like], count(like.id) >= ^min_likes and count(like.id) <= ^max_likes)
   end
 
+  defp with_rating(query, %{min_likes: min_likes}) do
+    query
+    |> join(:left, [post], like in assoc(post, :likes))
+    |> group_by([post, like], post.id)
+    |> select_merge([post, like], %{likes_count: count(like.id)})
+    |> having([_post, like], count(like.id) >= ^min_likes)
+  end
+
+  defp with_rating(query, %{max_likes: max_likes}) do
+    query
+    |> join(:left, [post], like in assoc(post, :likes))
+    |> group_by([post, like], post.id)
+    |> select_merge([post, like], %{likes_count: count(like.id)})
+    |> having([_post, like], count(like.id) <= ^max_likes)
+  end
+
   defp with_rating(query, _), do: query
+
+  defp likes_count(query) do
+    query
+    |> join(:left, [post], like in assoc(post, :likes))
+    |> group_by([post, like], post.id)
+    |> select_merge([post, like], %{likes_count: count(like.id)})
+  end
+
+  defp preload_relations(query) do
+    query
+    |> preload(:tags)
+  end
 end
